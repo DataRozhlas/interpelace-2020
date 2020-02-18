@@ -1,0 +1,305 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title></title>
+
+<style type="text/css">
+
+#chart {
+    max-width: 100%;
+    margin: 1em auto;
+}
+
+.small {
+    min-width: 500px;
+    height: 400px;
+    margin: 1em auto;
+    float: left;
+}
+
+#chartainer {
+    max-width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+</style>
+
+</head>
+<body>
+
+<div style="width: 1000px; height: 500px;" id="celkem"></div>
+
+<wide><div class="chartainer">
+<div class="chart small" id="kdo"></div>
+<div class="chart small" id="koho"></div>
+</div></wide>
+
+<div style="width: 1000px; height: 500px;" id="absence"></div>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+
+<script type="text/javascript">
+
+var colors = ['#b80058','#ebac23','#008cf9','#006e00','#00bbad','#d163e6','#b24502','#ff9287', '#5954d6', '#00c6f8', '#878500', '#00a76c', '#bdbdbd'];
+
+var vysledek = ['Přednesené', 'Nepřítomen', 'Propadlé', 'Zrušené', 'Aktuální'];
+
+var celkem = [
+  {y: 38, abs: 638},
+  {y: 24.9, abs: 418},
+  {y: 12.3, abs: 206},
+  {y: 16.5, abs: 277},
+  {y: 8.3, abs: 139}
+];
+
+var premier = [
+  {y: 38.4, abs: 158},
+  {y: 24.5, abs: 101},
+  {y: 8.1, abs: 33},
+  {y: 20.9, abs: 86},
+  {y: 8.3, abs: 34}
+];
+
+var poslanci = ['Věra Kovářová (STAN)', 'Dominik Feri (TOP 09)', 'Jakub Michálek (Piráti)', 'Olga Richterová (Piráti)', 'Vojtěch Munzar (ODS)', 'Karla Maříková (SPD)', 'Marian Jurečka (KDU-ČSL)', 'Pavla Golasowská (KDU-ČSL)', 'Vít Kaňkovský (KDU-ČSL)', 'Markéta Pekarová Adamová (TOP 09)', 'Helena Lanšádlová (TOP 09)'];
+
+var ministri = ['Andrej Babiš, premiér (ANO)', 'Adam Vojtěch, MZdr. (nestr.)', 'Jana Maláčová, MPSV (ČSSD)', 'Alena Schillerová, MF (nestr.)', 'Jan Hamáček, MZV (ČSSD)', 'Richard Brabec, MŽP (ANO)', 'Robert Plaga, MŠMT (ANO)', 'Dan Ťok, MD (nestr.)', 'Karel Havlíček, MP (nestr.)', 'Vladimír Kremlík, MD (nestr.)', 'Miroslav Toman, MZe. (nestr.)'];
+
+var kdo = [174, 101, 71, 71, 54, 53, 53, 47, 39, 37, 36];
+
+var koho = [412, 125, 120, 113, 104, 103, 102, 79, 70, 53, 52];
+
+var pred = [16.7,22.1,19.2,27.5,38.3,50.9,54.4,38.0,44.2,61.6,24.3];
+
+var abs = [47.1,44.2,36.5,33.3,24.5,20.8,15.5,13.9,12.4,9.6,5.7];
+
+var prop = [14.7,12.5,19.2,15.0,8.0,20.8,11.7,16.5,11.5,7.2,10.0];
+
+var zrus = [14.7,12.5,17.3,14.2,20.9,7.5,10.7,31.6,16.8,20.8,4.3];
+
+var nezn = [6.9,8.7,7.7,10.0,8.3,0.0,7.8,0.0,15.0,0.8,55.7];
+
+var absenteri = ['Robert Plaga, MŠMT (ANO)', 'Jan Hamáček, MZV (ČSSD)', 'Miroslav Toman, MZe. (nestr.)', 'Jana Maláčová, MPSV (ČSSD)', 'Andrej Babiš, premiér (ANO)', 'Vladimír Kremlík, MD (nestr.)', 'Richard Brabec, MŽP (ANO)', 'Dan Ťok, MD (nestr.)', 'Alena Schillerová, MF (nestr.)', 'Adam Vojtěch, MZ (nestr.)', 'Karel Havlíček, MP (nestr.)'];
+
+
+Highcharts.chart('celkem', {
+    chart: {
+        type: 'column'
+    },
+
+    title: {
+        text: 'Ústní interpelace na vládu A. Babiše'
+    },
+
+    subtitle: {
+        text: 'celkem × premiér, od ledna 2018'
+    },
+
+    xAxis: {
+        categories: vysledek
+    },
+
+    yAxis: {
+        title: {
+            text: 'podíl na interpelacích'
+        },
+        labels: {
+            formatter: function () {
+                return this.value + ' %';
+            }
+        }
+    },
+
+    tooltip: {
+        formatter: function () {
+            return '<span style="font-size: 10px">' + this.x + '</span><br/>' +
+                   '<b>' + this.y + ' % / ' + this.point.abs + ' </b> interpelací'
+        }
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    credits: {
+        href: 'https://www.psp.cz/sqw/interp.sqw?o=8',
+        text: 'Zdroj: PS PČR'
+    },
+
+    series: [{
+        name: 'vláda',
+        data: celkem,
+        color: colors[7]
+    }, {
+        name: 'premiér',
+        data: premier,
+        color: colors[4]
+    }]
+});
+
+Highcharts.chart('kdo', {
+    chart: {
+        type: 'bar'
+    },
+
+    title: {
+        text: 'Kdo se ptá?'
+    },
+
+    xAxis: {
+        categories: poslanci
+    },
+
+    yAxis: {
+        title: {
+            text: ''
+        }
+    },
+
+    tooltip: {
+        formatter: function () {
+            return '<span style="font-size: 10px">' + this.x + '</span><br/>' +
+                   '<b>' + this.y + ' </b> interpelací'
+        }
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    legend: {
+        enabled: false
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'kdo',
+        data: kdo,
+        color: colors[7]
+    }]
+});
+
+Highcharts.chart('koho', {
+    chart: {
+        type: 'bar'
+    },
+
+    title: {
+        text: 'Kdo odpovídá?'
+    },
+
+    xAxis: {
+        categories: ministri
+    },
+
+    yAxis: {
+        title: {
+            text: ''
+        }
+    },
+
+    tooltip: {
+        formatter: function () {
+            return '<span style="font-size: 10px">' + this.x + '</span><br/>' +
+                   '<b>' + this.y + ' </b> odpovědí'
+        }
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    legend: {
+        enabled: false
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'koho',
+        data: koho,
+        color: colors[4]
+    }]
+});
+
+Highcharts.chart('absence', {
+    chart: {
+        type: 'bar'
+    },
+
+    title: {
+        text: 'Absence při interpelacích'
+    },
+
+    subtitle: {
+        text: 'ministři s nejméně 50 dotazy'
+    },
+
+    xAxis: {
+        categories: absenteri
+    },
+
+    yAxis: {
+        title: {
+            text: 'podíl absencí'
+        },
+        labels: {
+            formatter: function () {
+                return this.value + ' %';
+            }
+        }
+    },
+
+    tooltip: {
+        valueSuffix: ' %',
+        shared: true
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    credits: {
+        href: 'https://www.psp.cz/sqw/interp.sqw?o=8',
+        text: 'Zdroj: PS PČR'
+    },
+
+    series: [{
+        name: vysledek[0],
+        data: pred,
+        color: colors[3],
+        visible: false
+    }, {
+        name: vysledek[1],
+        data: abs,
+        color: colors[0]
+    }, {
+        name: vysledek[2],
+        data: prop,
+        color: colors[1],
+        visible: false
+    }, {
+        name: vysledek[3],
+        data: zrus,
+        color: colors[4],
+        visible: false
+    }, {
+        name: vysledek[4],
+        data: nezn,
+        color: colors[7],
+        visible: false
+    }]
+});
+
+</script>
+</html>
